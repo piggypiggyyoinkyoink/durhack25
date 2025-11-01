@@ -9,6 +9,8 @@ document.getElementById("EnterLogins").addEventListener('submit',async function(
         let logininfomation = await response.json()
         console.log(logininfomation)
 
-        //Change page if true
+        if (logininfomation.exists){
+          window.location.href = "Pong.html"
+        }
         
 })
