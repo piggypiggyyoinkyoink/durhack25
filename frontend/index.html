@@ -39,15 +39,38 @@
           a.footer-link { color: rgba(255,255,255,0.85); text-decoration: none; }
           @media (min-width:1200px){ .hero { padding: 6rem 0; } }
         </style>
+        <script type="module">
+            import { getTalkSession } from 'https://cdn.jsdelivr.net/npm/@talkjs/core@1.5.8';
+          
+            const appId = 'tKAe9pYx';
+          
+            const userId = 'frank';
+            const otherUserId = 'nina';
+            const conversationId = 'my_conversation';
+          
+            const session = getTalkSession({
+              // @ts-ignore
+              host: 'durhack.talkjs.com',
+              appId,
+              userId,
+            });
+          
+            session.currentUser.createIfNotExists({ name: 'Frank' });
+            session.user(otherUserId).createIfNotExists({ name: 'Nina' });
+          
+            const conversation = session.conversation(conversationId);
+            conversation.createIfNotExists();
+            conversation.participant(otherUserId).createIfNotExists();
+          </script>
       </head>
       <body>
         <t-chatbox
-        host="durhack.talkjs.com"
-        style="width: 400px; height: 600px;"
-        app-id="tKAe9pYx"
-        user-id="sample_user_alice"
-        conversation-id="sample_conversation"
-        ></t-chatbox>
+  host="durhack.talkjs.com"
+  style="width: 400px; height: 600px;"
+  app-id="tKAe9pYx"
+  user-id="frank"
+  conversation-id="my_conversation"
+></t-chatbox>
         <!-- NAV -->
         <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
           <div class="container">
