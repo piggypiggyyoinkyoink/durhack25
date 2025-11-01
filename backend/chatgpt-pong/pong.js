@@ -18,12 +18,14 @@ form.addEventListener("submit", async (e)=>{
     e.preventDefault();
     let inputField = document.getElementById("inp1")
     let msg = inputField.value
+    let msg2 = msg.toLowerCase()
+
     document.getElementById("inp1").value = "";
 
     console.log(msg);
-    if(msg == "u"){
+    if(msg2 == "u"){
       sendInput("left","up", true)
-    }else if (msg == "d"){
+    }else if (msg2 == "d"){
       sendInput("left","down", true)
 
     }
@@ -48,10 +50,11 @@ form2.addEventListener("submit", async (e)=>{
     e.preventDefault();
     let inputField = document.getElementById("inp2")
     let msg = inputField.value
+    let msg2 = msg.toLowerCase()
     console.log(msg);
-    if(msg == "u"){
+    if(msg2 == "u"){
       sendInput("right","up", true)
-    }else if (msg == "d"){
+    }else if (msg2 == "d"){
       sendInput("right","down", true)
 
     }
