@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/@talkjs/web-components@0.0.27/default.css"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/@talkjs/web-components@0.0.27"
+          async
+        ></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Chatly — Real-time chat for teams</title>
+      
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+      
+        <!-- Optional: Bootstrap Icons -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+      
+        <style>
+          :root{
+            --brand: #0066FF;
+            --muted: #6c757d;
+            --bg-hero: linear-gradient(135deg, rgba(0,102,255,0.08), rgba(0,102,255,0.02));
+          }
+      
+          body { font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+          .hero { background: var(--bg-hero); padding: 4.5rem 0; }
+          .feature-card { border: 1px solid rgba(16,24,40,0.06); border-radius: .75rem; padding: 1.2rem; transition: transform .18s ease, box-shadow .18s ease; }
+          .feature-card:hover { transform: translateY(-6px); box-shadow: 0 8px 30px rgba(13,20,40,0.06); }
+          .cta-primary { background: var(--brand); border: none; color: #fff; }
+          .cta-primary:focus { box-shadow: 0 0 0 .25rem rgba(0,102,255,0.18); }
+          .badge-pro { background: rgba(0,102,255,0.09); color: var(--brand); font-weight:600; border-radius: .5rem; padding: .25rem .5rem; }
+          .pricing-card { border-radius: .75rem; border: 1px solid rgba(16,24,40,0.06); }
+          .testimonial { background: #fff; border-radius: .5rem; padding: 1rem; border: 1px solid rgba(16,24,40,0.04); }
+          footer { background: #0f1724; color: rgba(255,255,255,0.8); padding: 2rem 0; }
+          a.footer-link { color: rgba(255,255,255,0.85); text-decoration: none; }
+          @media (min-width:1200px){ .hero { padding: 6rem 0; } }
+        </style>
+      </head>
+      <body>
+        <t-chatbox
+            host="durhack.talkjs.com"
+            style="width: 400px; height: 600px;"
+            app-id="tKAe9pYx"
+            user-id="sample_user_alice"
+            conversation-id="LiveStreamTest"
+        ></t-chatbox>
+        <!-- NAV -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+          <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+              <span class="badge-pro">Chatly</span>
+              <span class="fw-semibold ms-1">Chatly</span>
+            </a>
+      
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+      
+            <div class="collapse navbar-collapse" id="navMenu">
+              <ul class="navbar-nav ms-auto align-items-lg-center">
+                <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+                <li class="nav-item"><a class="nav-link" href="#how">How it works</a></li>
+                <li class="nav-item"><a class="nav-link" href="#pricing">Pricing</a></li>
+                <li class="nav-item"><a class="nav-link" href="#testimonials">Customers</a></li>
+                <li class="nav-item ms-3"><button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#signupModal">Sign up</button></li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      
+        <!-- HERO -->
+        <header class="hero">
+          <div class="container">
+            <div class="row align-items-center gy-4">
+              <div class="col-lg-6">
+                <h1 class="display-5 fw-bold">Real-time chat built for modern teams</h1>
+                <p class="lead text-muted mb-4">Secure, fast, and extensible messaging that keeps work moving. Threads, integrations, and rich media — all with enterprise-grade controls.</p>
+      
+                
+      
+                
+              </div>
+      
+              <div class="col-lg-6">
+                <div class="card border-0 shadow-sm">
+                  <div class="card-body">
+                    <img src="https://via.placeholder.com/800x460?text=App+Preview" alt="App preview" class="img-fluid rounded">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+      
+        <main class="pb-5">
+      
+          <!-- Features -->
+          
+      
+          
+      
+          <!-- How it works -->
+          <section id="how" class="py-5 bg-light">
+            <div class="container">
+              <div class="text-center mb-4">
+                <h2 class="h3 fw-bold">How it works</h2>
+              </div>
+      
+              <div class="row g-3">
+                <div class="col-md-4">
+                  <div class="text-center p-3">
+                    <div class="mb-3 rounded-circle bg-white shadow-sm d-inline-flex align-items-center justify-content-center" style="width:72px;height:72px">
+                      <i class="bi bi-person-plus fs-3 text-primary"></i>
+                    </div>
+                    <h5 class="mt-2">Invite your team</h5>
+                    <p class="text-muted small">Create workspaces and invite teammates via SSO or invite link.</p>
+                  </div>
+                </div>
+      
+                <div class="col-md-4">
+                  <div class="text-center p-3">
+                    <div class="mb-3 rounded-circle bg-white shadow-sm d-inline-flex align-items-center justify-content-center" style="width:72px;height:72px">
+                      <i class="bi bi-chat-left-text fs-3 text-primary"></i>
+                    </div>
+                    <h5 class="mt-2">Start conversations</h5>
+                    <p class="text-muted small">Channels, threads, and searchable history make collaboration easy.</p>
+                  </div>
+                </div>
+      
+                <div class="col-md-4">
+                  <div class="text-center p-3">
+                    <div class="mb-3 rounded-circle bg-white shadow-sm d-inline-flex align-items-center justify-content-center" style="width:72px;height:72px">
+                      <i class="bi bi-gear fs-3 text-primary"></i>
+                    </div>
+                    <h5 class="mt-2">Automate &amp; extend</h5>
+                    <p class="text-muted small">Bots and integrations for alerts, ticketing, CI, and more.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+      
+          <!-- Pricing -->
+          
+      
+          
+      
+          <!-- Testimonials -->
+          
+        </main>
+      
+        <!-- Footer -->
+        <footer>
+          <div class="container">
+            <div class="row gy-3">
+              <div class="col-md-4">
+                <div class="fw-semibold mb-2">Chatly</div>
+                <div class="small">Secure team chat and workflow automation.</div>
+              </div>
+      
+              <div class="col-md-4">
+                <div class="fw-semibold mb-2">Product</div>
+                <div class="small"><a class="footer-link d-block" href="#features">Features</a><a class="footer-link d-block" href="#pricing">Pricing</a></div>
+              </div>
+      
+              <div class="col-md-4">
+                <div class="fw-semibold mb-2">Stay updated</div>
+                <form class="d-flex" onsubmit="event.preventDefault(); alert('Subscribed')">
+                  <input class="form-control form-control-sm me-2" placeholder="Email" required="">
+                  <button class="btn btn-sm btn-primary">Subscribe</button>
+                </form>
+              </div>
+            </div>
+      
+            <div class="text-center mt-4 small">© <span id="year">2025</span> Chatly • All rights reserved</div>
+          </div>
+        </footer>
+      
+        <!-- Signup Modal -->
+        <div class="modal fade" id="signupModal" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <form id="signupForm" class="needs-validation" novalidate="">
+                <div class="modal-header">
+                  <h5 class="modal-title">Create your workspace</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+      
+                <div class="modal-body">
+                  <div class="mb-3">
+                    <label class="form-label">Workspace name</label>
+                    <input name="workspace" class="form-control" required="">
+                    <div class="invalid-feedback">Please provide a workspace name</div>
+                  </div>
+      
+                  <div class="mb-3">
+                    <label class="form-label">Your email</label>
+                    <input name="email" type="email" class="form-control" required="">
+                    <div class="invalid-feedback">Please enter a valid email</div>
+                  </div>
+      
+                  <div class="form-text">By continuing you agree to our terms and privacy policy.</div>
+                </div>
+      
+                <div class="modal-footer">
+                  <button type="submit" class="btn cta-primary">Create workspace</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      
+        <!-- Demo Modal (simple placeholder) -->
+        <div class="modal fade" id="demoModal" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Demo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="ratio ratio-16x9">
+                  <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Demo" allowfullscreen=""></iframe>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        <!-- Bootstrap JS bundle -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+      
+        <script>
+          // Small helpers
+          document.getElementById('year').textContent = new Date().getFullYear();
+      
+          // Open signup modal with plan prefilled (example hook)
+          function openSignup(plan){
+            var modal = new bootstrap.Modal(document.getElementById('signupModal'));
+            modal.show();
+            // Could prefill hidden field for analytics
+            // document.querySelector('#signupModal input[name="plan"]').value = plan;
+          }
+      
+          // Basic Bootstrap validation
+          (function () {
+            'use strict'
+            var forms = document.querySelectorAll('.needs-validation')
+            Array.prototype.slice.call(forms).forEach(function (form) {
+              form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                  event.preventDefault()
+                  event.stopPropagation()
+                } else {
+                  event.preventDefault()
+                  // Replace with actual signup call
+                  var modal = bootstrap.Modal.getInstance(document.getElementById('signupModal'));
+                  modal.hide();
+                  alert('Workspace created — check your email to continue')
+                }
+                form.classList.add('was-validated')
+              }, false)
+            })
+          })()
+      
+          // Inline hero form submission
+          document.getElementById('inlineSignup').addEventListener('submit', function(e){
+            e.preventDefault();
+            var email = document.getElementById('heroEmail').value;
+            if (!email) return;
+            // show signup modal with email prefilled
+            var signup = new bootstrap.Modal(document.getElementById('signupModal'));
+            signup.show();
+            var emailField = document.querySelector('#signupModal input[name="email"]');
+            if(emailField) emailField.value = email;
+          });
+        </script>
+      
+      </body>
+</html>
