@@ -7,13 +7,6 @@ const path = require("path");
 app.use(express.static("../frontend"));
 app.use(express.json());
 
-const session = getTalkSession({
-    // @ts-ignore
-    host: 'durhack.talkjs.com',
-    appId: 'tKAe9pYx',
-    userId,
-});
-
 module.exports=app;
 
 //User check
@@ -22,6 +15,13 @@ app.get('/api/user/:username', function (req,resp){
     let user = req.params.username;
     console.log("USERID: " + user)
     // CALL TO CHECK EXISTS
+    var session = talkJS.getTalkSession({
+        // @ts-ignore
+        host: 'durhack.talkjs.com',
+        appId: 'tKAe9pYx',
+        userId: user
+    });
+
     session.currentUser.createIfNotExists({ name: user });
     check = true;
     resp.json({exists: check});
