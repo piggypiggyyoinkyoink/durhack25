@@ -52,8 +52,8 @@
 
             const userId = name;
             console.log("USERID " + userId)
-            const otherUserId = 'nina';
             const conversationId = 'my_conversation';
+            const conversation2Id = "test2";
 
             const session = getTalkSession({
                 // @ts-ignore
@@ -65,15 +65,15 @@
             session.currentUser.createIfNotExists({ name: name });
             document.getElementById("dingus").userId = name;
             document.getElementById("dingus2").userId = name;
-            document.getElementById("dingus2").conversationId = "sample_conversation";
+
+
+            document.getElementById("dingus2").conversationId = conversation2Id;
             //session.user(otherUserId).createIfNotExists({ name: 'Nina' });
 
             const conversation = session.conversation(conversationId);
-            const conversation2 = session.conversation("sample_conversation");
+            const conversation2 = session.conversation(conversation2Id);
             conversation.createIfNotExists();
             conversation2.createIfNotExists();
-            conversation.participant(otherUserId).createIfNotExists();
-            conversation2.participant(otherUserId).createIfNotExists();
 
           </script>
       </head>
@@ -84,11 +84,11 @@
   app-id="tKAe9pYx"
   conversation-id="my_conversation"
 ></t-chatbox>
+<br><br>
 <t-chatbox id = "dingus2"
   host="durhack.talkjs.com"
   style="width: 400px; height: 600px;"
   app-id="tKAe9pYx"
-  conversation-id="sample_conversation"
 ></t-chatbox>
 
 
