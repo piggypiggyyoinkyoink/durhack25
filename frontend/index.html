@@ -76,51 +76,7 @@
         <!-- Bootstrap JS bundle -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
       
-        <script>
-          // Small helpers
-          document.getElementById('year').textContent = new Date().getFullYear();
-      
-          // Open signup modal with plan prefilled (example hook)
-          function openSignup(plan){
-            var modal = new bootstrap.Modal(document.getElementById('signupModal'));
-            modal.show();
-            // Could prefill hidden field for analytics
-            // document.querySelector('#signupModal input[name="plan"]').value = plan;
-          }
-      
-          // Basic Bootstrap validation
-          (function () {
-            'use strict'
-            var forms = document.querySelectorAll('.needs-validation')
-            Array.prototype.slice.call(forms).forEach(function (form) {
-              form.addEventListener('submit', function (event) {
-                if (!form.checkValidity()) {
-                  event.preventDefault()
-                  event.stopPropagation()
-                } else {
-                  event.preventDefault()
-                  // Replace with actual signup call
-                  var modal = bootstrap.Modal.getInstance(document.getElementById('signupModal'));
-                  modal.hide();
-                  alert('Workspace created — check your email to continue')
-                }
-                form.classList.add('was-validated')
-              }, false)
-            })
-          })()
-      
-          // Inline hero form submission
-          document.getElementById('inlineSignup').addEventListener('submit', function(e){
-            e.preventDefault();
-            var email = document.getElementById('heroEmail').value;
-            if (!email) return;
-            // show signup modal with email prefilled
-            var signup = new bootstrap.Modal(document.getElementById('signupModal'));
-            signup.show();
-            var emailField = document.querySelector('#signupModal input[name="email"]');
-            if(emailField) emailField.value = email;
-          });
-        </script>
+        
       
       </body>
 </html>
