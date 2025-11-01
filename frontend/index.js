@@ -11,7 +11,7 @@ document.getElementById("EnterLogins").addEventListener('submit',async function(
       console.log(logininfomation)
 
       if (logininfomation.exists){
-            window.location.href = "games.html"
+            window.location.href = `games.html?name=${name}`;
       }
         
 })
