@@ -109,7 +109,6 @@ app.get('api/conversation/:converstaionName'), function (req,resp){
 
 //Message passthrough
 
-//Rooms games
 
 
 
@@ -119,6 +118,48 @@ app.get('api/conversation/:converstaionName'), function (req,resp){
 
 
 //chatgpt pong
+app.post("/pong/sendmessage", async function(req,res){
+    
+    console.log(req.body);//contains message text, user ID and conversation ID.
+    const conversationId = req.body.conversation;
+    const userId = req.body.user;
+    const messageText = req.body.message;
+    const registerConversation = await fetch(`https://api.durhack.talkjs.com/v1/tKAe9pYx/conversations/${conversationId}`, {
+        method: "PUT",
+        headers: {
+            Authorization: 'Bearer sk_test_j3dBD6Y7qNNd4P5Ye9I18QgLFbqIDh2m',
+            "Content-Type" : "application/json"
+        },
+        body: JSON.stringify({
+            "participants" : [userId]
+        })
+    });
+    if (registerConversation.ok){
+        const sendMessage = await fetch(`https://api.durhack.talkjs.com/v1/tKAe9pYx/conversations/${conversationId}/messages`,{
+            method: "POST",
+        headers: {
+            Authorization: 'Bearer sk_test_j3dBD6Y7qNNd4P5Ye9I18QgLFbqIDh2m',
+            "Content-Type" : "application/json"
+        },
+        body:JSON.stringify([{
+            "text": `${messageText}`,
+            "sender": `${userId}`,
+            "type": "UserMessage"
+        }])
+        })
+        //console.log(sendMessage);
+        if (sendMessage.ok){
+
+            res.sendStatus(200);
+        }else{
+            res.send(500)
+        }
+    }else{
+        res.send(500)
+    }
+})
+
+
 
 app.get("/pong", (req, res) => {
   res.sendFile(path.join(__dirname, "chatgpt-pong/pong.html"));
@@ -129,7 +170,7 @@ const port = process.env.PORT || 8080;
 
 
 
-// --- PONG GAME SECTION ---
+// --- CHAOTIC PONG SECTION ---
 const WIDTH = 800;
 const HEIGHT = 480;
 const PADDLE_HEIGHT = 80;
@@ -137,7 +178,8 @@ const PADDLE_WIDTH = 10;
 const BALL_RADIUS = 8;
 const TICK_RATE = 60;
 
-let players = [null, null];
+let leftInputs = { up: 0, down: 0 };
+let rightInputs = { up: 0, down: 0 };
 let spectators = [];
 
 let gameState = {
@@ -155,39 +197,52 @@ function resetBall(direction = 1) {
 
 function broadcast(obj) {
   const msg = JSON.stringify(obj);
-  spectators.concat(players).forEach(ws => {
-    if (ws && ws.readyState === WebSocket.OPEN) ws.send(msg);
+  wss.clients.forEach(ws => {
+    if (ws.readyState === WebSocket.OPEN) ws.send(msg);
   });
 }
 
-// Attach Pong-specific WebSocket handling
 wss.on('connection', (ws, req) => {
-  // only handle connections that go to /pong
   if (req.url !== '/pong') return;
-
-  let role = 'spectator';
-  let index = null;
-
-  if (!players[0]) { players[0] = ws; role = 'player'; index = 0; }
-  else if (!players[1]) { players[1] = ws; role = 'player'; index = 1; }
-  else spectators.push(ws);
+  spectators.push(ws);
 
   ws.send(JSON.stringify({
     type: 'welcome',
-    role,
-    playerIndex: index,
+    role: 'chaotic',
     width: WIDTH,
     height: HEIGHT
   }));
 
-  console.log(`Pong: ${role}${index !== null ? ' ' + (index + 1) : ''} connected`);
+  console.log('New chaotic pong player joined');
 
   ws.on('message', msg => {
     try {
       const data = JSON.parse(msg);
-      if (data.type === 'paddle' && role === 'player') {
-        const y = Math.max(0, Math.min(HEIGHT - PADDLE_HEIGHT, data.y));
-        gameState.paddles[index] = y;
+      if (data.type === 'input') {
+          console.log(data)
+    
+        if (data.side === 'left') {
+            if (data.down){
+                gameState.paddles[0]+=40;
+            }else{
+                gameState.paddles[0]-=40;
+            }
+        } else if (data.side === 'right') {
+            if (data.down){
+                gameState.paddles[1]+=40;
+            }else{
+                gameState.paddles[1]-=40;
+            }
+
+        }
+      } else if (data.type === 'inputEnd') {
+        if (data.side === 'left') {
+          leftInputs.up -= data.up ? 1 : 0;
+          leftInputs.down -= data.down ? 1 : 0;
+        } else if (data.side === 'right') {
+          rightInputs.up -= data.up ? 1 : 0;
+          rightInputs.down -= data.down ? 1 : 0;
+        }
       }
     } catch (e) {
       console.error(e);
@@ -195,31 +250,39 @@ wss.on('connection', (ws, req) => {
   });
 
   ws.on('close', () => {
-    console.log('Pong client disconnected');
-    if (role === 'player') players[index] = null;
-    else spectators = spectators.filter(s => s !== ws);
+    spectators = spectators.filter(s => s !== ws);
+    console.log('Player disconnected');
   });
 });
 
-// Pong game loop (runs globally)
+// game loop
 setInterval(() => {
   const s = gameState;
   const dt = 1 / TICK_RATE;
 
+  // move paddles based on total input
+  const speed = 250 * dt;
+  s.paddles[0] += (leftInputs.down - leftInputs.up) * speed;
+  s.paddles[1] += (rightInputs.down - rightInputs.up) * speed;
+
+  // clamp paddles
+  s.paddles[0] = Math.max(0, Math.min(HEIGHT - PADDLE_HEIGHT, s.paddles[0]));
+  s.paddles[1] = Math.max(0, Math.min(HEIGHT - PADDLE_HEIGHT, s.paddles[1]));
+
+  // move ball
   s.ball.x += s.ball.vx * dt;
   s.ball.y += s.ball.vy * dt;
 
+  // bounce top/bottom
   if (s.ball.y < 0 || s.ball.y > HEIGHT) s.ball.vy *= -1;
 
-  // left paddle
+  // paddle collisions
   if (s.ball.x - BALL_RADIUS < PADDLE_WIDTH) {
     const py = s.paddles[0];
     if (s.ball.y >= py && s.ball.y <= py + PADDLE_HEIGHT) {
       s.ball.vx = Math.abs(s.ball.vx);
     }
   }
-
-  // right paddle
   if (s.ball.x + BALL_RADIUS > WIDTH - PADDLE_WIDTH) {
     const py = s.paddles[1];
     if (s.ball.y >= py && s.ball.y <= py + PADDLE_HEIGHT) {
@@ -228,13 +291,8 @@ setInterval(() => {
   }
 
   // scoring
-  if (s.ball.x < 0) {
-    s.scores[1]++;
-    resetBall(1);
-  } else if (s.ball.x > WIDTH) {
-    s.scores[0]++;
-    resetBall(-1);
-  }
+  if (s.ball.x < 0) { s.scores[1]++; resetBall(1); }
+  else if (s.ball.x > WIDTH) { s.scores[0]++; resetBall(-1); }
 
   broadcast({ type: 'state', state: s });
 }, 1000 / TICK_RATE);
