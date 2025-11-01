@@ -40,9 +40,11 @@
           @media (min-width:1200px){ .hero { padding: 6rem 0; } }
         </style>
         <script type="module">
+          pass
+          /*
             import { getTalkSession } from 'https://cdn.jsdelivr.net/npm/@talkjs/core@1.5.8';
             let params = new URLSearchParams(document.location.search);
-            let name = params.get("name");
+            let name = params.get("Username");
             if (!name){
                 let name = "Frank";
 
@@ -75,6 +77,7 @@
             const conversation2 = session.conversation(conversation2Id);
             conversation.createIfNotExists();
             conversation2.createIfNotExists();
+            */</script>
 
 
 
@@ -124,6 +127,12 @@
           </script>
       </head>
       <body>
+        <form id = "EnterLogins">
+          <div class="mb-3">
+            <label for="UserName" class="form-label">User Name</label>
+                Username <input name ="Username" type="text" class="form-control" id="UserName" placeholder="Use Test">
+          </div>
+        </form>
         <t-chatbox id = "dingus"
             host="durhack.talkjs.com"
             style="width: 400px; height: 600px;"
@@ -158,4 +167,5 @@
         
       
       </body>
+      <script src="index.js"></script>
 </html>
