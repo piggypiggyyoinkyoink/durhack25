@@ -84,7 +84,7 @@ function connectToPong() {
     if (msg.type === 'welcome') {
       canvas.width = msg.width;
       canvas.height = msg.height;
-      statusEl.textContent = 'Press W/S for left paddle, ↑/↓ for right!';
+      statusEl.textContent = 'Type "u" for up and "d" for down';
     }
 
     if (msg.type === 'state') {
