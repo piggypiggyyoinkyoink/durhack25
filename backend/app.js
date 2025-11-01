@@ -183,7 +183,7 @@ const PADDLE_HEIGHT = 80;
 
 let connectedClients = 0;
 let gameInterval = null;
-
+let inputs = [0,0,0,0,0]
 // Helper: broadcast to all clients
 function broadcast(data) {
   const msg = JSON.stringify(data);
@@ -301,6 +301,19 @@ wss.on("connection", (ws, req) => {
         }
       } else if (data.type === 'reverse') {
         gameState.ball.vx *= -1;
+      }else if (data.type == "rotate"){
+        gameState.ball.vx= Math.random() > 0.5 ? 4 : -4;
+        gameState.ball.vy = Math.random() > 0.5 ? 3 : -3;
+      }else if(data.type == "slow"){
+        if (gameState.ball.vx >=1 || gameState.ball.vx <= -1){
+            gameState.ball.vx *= 0.75;
+            gameState.ball.vy *= 0.75;
+        }
+      }else if (data.type == "zoom"){
+        if (gameState.ball.vx <=6 || gameState.ball.vx >= -6){
+            gameState.ball.vx *= 1.25;
+            gameState.ball.vy *= 1.25;
+        }
       }
     } catch (e) {
       console.error(e);

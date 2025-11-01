@@ -24,13 +24,19 @@ form.addEventListener("submit", async (e)=>{
 
     console.log(msg);
     if(msg2 == "u"){
-      sendInput("left","up", true)
+      sendInput("left","up", "input")
     }else if (msg2 == "d"){
-      sendInput("left","down", true)
+      sendInput("left","down", "input")
 
     }
     else if (msg2=="r"){
-      sendInput("dingus", "dingus", false)
+      sendInput("dingus", "dingus", "reverse")
+    }else if (msg2=="b"){
+      sendInput("dingus", "dingus", "rotate")
+    }else if (msg2=="s"){
+      sendInput("dingus","dingus", "slow")
+    }else if (msg2=="z"){
+      sendInput("dingus","dingus","zoom")
     }
     const data = JSON.stringify({
         "message": msg,
@@ -56,12 +62,18 @@ form2.addEventListener("submit", async (e)=>{
     let msg2 = msg.toLowerCase()
     console.log(msg);
     if(msg2 == "u"){
-      sendInput("right","up", true)
+      sendInput("right","up", "input")
     }else if (msg2 == "d"){
-      sendInput("right","down", true)
+      sendInput("right","down", "input")
 
     }else if (msg2=="r"){
-      sendInput("dingus", "dingus", false)
+      sendInput("dingus", "dingus", "reverse")
+    }else if (msg2=="b"){
+      sendInput("dingus", "dingus", "rotate")
+    }else if (msg2=="s"){
+      sendInput("dingus","dingus", "slow")
+    }else if (msg2=="z"){
+      sendInput("dingus","dingus","zoom")
     }
     const data = JSON.stringify({
         "message": msg,
@@ -92,7 +104,7 @@ function connectToPong() {
     if (msg.type === 'welcome') {
       canvas.width = msg.width;
       canvas.height = msg.height;
-      statusEl.textContent = 'Type "u" for up and "d" for down';
+      statusEl.textContent = 'Type "u" for up and "d" for down. Other letters may do different things....';
     }
 
     if (msg.type === 'state') {
@@ -104,23 +116,11 @@ function connectToPong() {
     statusEl.textContent = 'Disconnected';
   };
 }
-/*
-// track keypresses
-const keys = {};
-window.addEventListener('keydown', e => {
-  if (keys[e.key]) return;
-  keys[e.key] = true;
-  sendKeyChange(e.key, true);
-});
-window.addEventListener('keyup', e => {
-  keys[e.key] = false;
-  sendKeyChange(e.key, false);
-});*/
 
-function sendInput(side, dir, pressed) {
+function sendInput(side, dir, type) {
   if (!ws || ws.readyState !== WebSocket.OPEN) return;
   const msg = {
-    type: pressed ? 'input' : 'reverse',
+    type: type,
     up: dir == 'up',
     down: dir == 'down',
     side
