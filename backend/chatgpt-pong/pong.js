@@ -29,6 +29,9 @@ form.addEventListener("submit", async (e)=>{
       sendInput("left","down", true)
 
     }
+    else if (msg2=="r"){
+      sendInput("dingus", "dingus", false)
+    }
     const data = JSON.stringify({
         "message": msg,
         "conversation":conversationId,
@@ -57,6 +60,8 @@ form2.addEventListener("submit", async (e)=>{
     }else if (msg2 == "d"){
       sendInput("right","down", true)
 
+    }else if (msg2=="r"){
+      sendInput("dingus", "dingus", false)
     }
     const data = JSON.stringify({
         "message": msg,
@@ -115,7 +120,7 @@ window.addEventListener('keyup', e => {
 function sendInput(side, dir, pressed) {
   if (!ws || ws.readyState !== WebSocket.OPEN) return;
   const msg = {
-    type: pressed ? 'input' : 'inputEnd',
+    type: pressed ? 'input' : 'reverse',
     up: dir == 'up',
     down: dir == 'down',
     side

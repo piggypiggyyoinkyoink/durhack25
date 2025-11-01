@@ -299,14 +299,8 @@ wss.on("connection", (ws, req) => {
             }
 
         }
-      } else if (data.type === 'inputEnd') {
-        if (data.side === 'left') {
-          leftInputs.up -= data.up ? 1 : 0;
-          leftInputs.down -= data.down ? 1 : 0;
-        } else if (data.side === 'right') {
-          rightInputs.up -= data.up ? 1 : 0;
-          rightInputs.down -= data.down ? 1 : 0;
-        }
+      } else if (data.type === 'reverse') {
+        gameState.ball.vx *= -1;
       }
     } catch (e) {
       console.error(e);
