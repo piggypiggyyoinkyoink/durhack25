@@ -173,7 +173,7 @@ const port = process.env.PORT || 8080;
 
 let gameState = {
   paddles: [200, 200],
-  ball: { x: 400, y: 240, vx: 4, vy: 3 },
+  ball: { x: 400, y: 240, vx: 8, vy: 6 },
   scores: [0, 0],
 };
 
@@ -199,7 +199,26 @@ function updateGame() {
   const b = gameState.ball;
   b.x += b.vx;
   b.y += b.vy;
-
+    if (inputs[0] != 0){
+        gameState.paddles[0]+= 40 * inputs[0]
+        inputs[0] = 0
+        if (gameState.paddles[0] < 0){
+            gameState.paddles[0] = 0;
+        }
+        else if (gameState.paddles[0] > HEIGHT-PADDLE_HEIGHT){
+            gameState.paddles[0] = HEIGHT - PADDLE_HEIGHT;
+        }
+    }
+    if (inputs[1] != 0){
+        gameState.paddles[1] += 40*inputs[1]
+        inputs[1]=0
+        if (gameState.paddles[1] < 0){
+            gameState.paddles[1] = 0;
+        }
+        else if (gameState.paddles[1] > HEIGHT){
+            gameState.paddles[1] = HEIGHT;
+        }
+    }
   // Wall bounce
   if (b.y < 0 || b.y > HEIGHT) b.vy *= -1;
 
@@ -238,8 +257,8 @@ function resetBall() {
   gameState.ball = {
     x: WIDTH / 2,
     y: HEIGHT / 2,
-    vx: Math.random() > 0.5 ? 4 : -4,
-    vy: Math.random() > 0.5 ? 3 : -3,
+    vx: Math.random() > 0.5 ? 8 : -8,
+    vy: Math.random() > 0.5 ? 6 : -6,
   };
 }
 
@@ -247,7 +266,7 @@ function startGameLoop() {
   if (gameInterval) return;
   console.log("🎮 Game loop started");
   gameState.scores = [0,0]
-  gameInterval = setInterval(updateGame, 1000 / 60);
+  gameInterval = setInterval(updateGame, 1000 / 20);
 }
 
 function stopGameLoop() {
@@ -287,30 +306,37 @@ wss.on("connection", (ws, req) => {
     
         if (data.side === 'left') {
             if (data.down){
-                gameState.paddles[0]+=40;
+                //gameState.paddles[0]+=40;
+                inputs[0] += 1
             }else{
-                gameState.paddles[0]-=40;
+                //gameState.paddles[0]-=40;
+                inputs[0] -= 1
+
             }
         } else if (data.side === 'right') {
             if (data.down){
-                gameState.paddles[1]+=40;
+                //gameState.paddles[1]+=40;
+                inputs[1] += 1
+
             }else{
-                gameState.paddles[1]-=40;
+                //gameState.paddles[1]-=40;
+                inputs[1] -= 1
+
             }
 
         }
       } else if (data.type === 'reverse') {
         gameState.ball.vx *= -1;
       }else if (data.type == "rotate"){
-        gameState.ball.vx= Math.random() > 0.5 ? 4 : -4;
-        gameState.ball.vy = Math.random() > 0.5 ? 3 : -3;
+        gameState.ball.vx= Math.random() > 0.5 ? 8 : -8;
+        gameState.ball.vy = Math.random() > 0.5 ? 6 : -6;
       }else if(data.type == "slow"){
-        if (gameState.ball.vx >=1 || gameState.ball.vx <= -1){
+        if (gameState.ball.vx >=2 || gameState.ball.vx <= -2){
             gameState.ball.vx *= 0.75;
             gameState.ball.vy *= 0.75;
         }
       }else if (data.type == "zoom"){
-        if (gameState.ball.vx <=6 || gameState.ball.vx >= -6){
+        if (gameState.ball.vx <=10 || gameState.ball.vx >= -10){
             gameState.ball.vx *= 1.25;
             gameState.ball.vy *= 1.25;
         }

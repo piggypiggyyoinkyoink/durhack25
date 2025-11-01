@@ -43,14 +43,11 @@ form.addEventListener("submit", async (e)=>{
         "conversation":conversationId,
         "user":userId
     });
-    const response = await fetch("/pong/sendmessage", {
+    await fetch("/pong/sendmessage", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: data
     });
-    if (response.ok){
-        document.getElementById("inp1").value = "";
-    }
 });
 
 //handle submitting messages from Conversation 2:
@@ -60,6 +57,8 @@ form2.addEventListener("submit", async (e)=>{
     let inputField = document.getElementById("inp2")
     let msg = inputField.value
     let msg2 = msg.toLowerCase()
+    document.getElementById("inp2").value = "";
+
     console.log(msg);
     if(msg2 == "u"){
       sendInput("right","up", "input")
@@ -80,14 +79,11 @@ form2.addEventListener("submit", async (e)=>{
         "conversation":conversation2Id,
         "user":userId
     });
-    const response = await fetch("/pong/sendmessage", {
+    await fetch("/pong/sendmessage", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: data
     });
-    if (response.ok){
-        document.getElementById("inp2").value = "";
-    }
 });
 
 function connectToPong() {
