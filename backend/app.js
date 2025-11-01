@@ -170,52 +170,116 @@ const port = process.env.PORT || 8080;
 
 
 
-// --- CHAOTIC PONG SECTION ---
+
+let gameState = {
+  paddles: [200, 200],
+  ball: { x: 400, y: 240, vx: 4, vy: 3 },
+  scores: [0, 0],
+};
+
 const WIDTH = 800;
 const HEIGHT = 480;
 const PADDLE_HEIGHT = 80;
-const PADDLE_WIDTH = 10;
-const BALL_RADIUS = 8;
-const TICK_RATE = 60;
 
-let leftInputs = { up: 0, down: 0 };
-let rightInputs = { up: 0, down: 0 };
-let spectators = [];
+let connectedClients = 0;
+let gameInterval = null;
 
-let gameState = {
-  ball: { x: WIDTH/2, y: HEIGHT/2, vx: 250, vy: 150 },
-  paddles: [HEIGHT/2 - PADDLE_HEIGHT/2, HEIGHT/2 - PADDLE_HEIGHT/2],
-  scores: [0, 0]
-};
-
-function resetBall(direction = 1) {
-  gameState.ball.x = WIDTH/2;
-  gameState.ball.y = HEIGHT/2;
-  gameState.ball.vx = 250 * direction;
-  gameState.ball.vy = (Math.random() * 200 - 100);
-}
-
-function broadcast(obj) {
-  const msg = JSON.stringify(obj);
-  wss.clients.forEach(ws => {
-    if (ws.readyState === WebSocket.OPEN) ws.send(msg);
+// Helper: broadcast to all clients
+function broadcast(data) {
+  const msg = JSON.stringify(data);
+  wss.clients.forEach((client) => {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(msg);
+    }
   });
 }
 
-wss.on('connection', (ws, req) => {
-  if (req.url !== '/pong') return;
-  spectators.push(ws);
+// Update game loop
+function updateGame() {
+  const b = gameState.ball;
+  b.x += b.vx;
+  b.y += b.vy;
 
-  ws.send(JSON.stringify({
-    type: 'welcome',
-    role: 'chaotic',
-    width: WIDTH,
-    height: HEIGHT
-  }));
+  // Wall bounce
+  if (b.y < 0 || b.y > HEIGHT) b.vy *= -1;
 
-  console.log('New chaotic pong player joined');
+  // Left paddle
+  if (
+    b.x < 10 &&
+    b.y > gameState.paddles[0] &&
+    b.y < gameState.paddles[0] + PADDLE_HEIGHT
+  ) {
+    b.vx *= -1;
+  }
 
-  ws.on('message', msg => {
+  // Right paddle
+  if (
+    b.x > WIDTH - 10 &&
+    b.y > gameState.paddles[1] &&
+    b.y < gameState.paddles[1] + PADDLE_HEIGHT
+  ) {
+    b.vx *= -1;
+  }
+
+  // Score
+  if (b.x < 0) {
+    gameState.scores[1]++;
+    resetBall();
+  }
+  if (b.x > WIDTH) {
+    gameState.scores[0]++;
+    resetBall();
+  }
+
+  broadcast({ type: "state", state: gameState });
+}
+
+function resetBall() {
+  gameState.ball = {
+    x: WIDTH / 2,
+    y: HEIGHT / 2,
+    vx: Math.random() > 0.5 ? 4 : -4,
+    vy: Math.random() > 0.5 ? 3 : -3,
+  };
+}
+
+function startGameLoop() {
+  if (gameInterval) return;
+  console.log("🎮 Game loop started");
+  gameState.scores = [0,0]
+  gameInterval = setInterval(updateGame, 1000 / 60);
+}
+
+function stopGameLoop() {
+  if (!gameInterval) return;
+  clearInterval(gameInterval);
+  gameInterval = null;
+  console.log("🛑 Game loop stopped (no players connected)");
+}
+
+// Handle WebSocket connections
+wss.on("connection", (ws, req) => {
+  // Only handle connections for /pong
+  if (req.url !== "/pong") return;
+
+  connectedClients++;
+  console.log(`👥 Client connected (${connectedClients} total)`);
+
+  // Start loop if not already running
+  startGameLoop();
+
+  // Send welcome message with game size
+  ws.send(
+    JSON.stringify({
+      type: "welcome",
+      width: WIDTH,
+      height: HEIGHT,
+      state: gameState,
+    })
+  );
+
+  // Handle incoming input from clients
+  ws.on("message", (msg) => {
     try {
       const data = JSON.parse(msg);
       if (data.type === 'input') {
@@ -249,53 +313,16 @@ wss.on('connection', (ws, req) => {
     }
   });
 
-  ws.on('close', () => {
-    spectators = spectators.filter(s => s !== ws);
-    console.log('Player disconnected');
+  ws.on("close", () => {
+    connectedClients--;
+    console.log(`👋 Client disconnected (${connectedClients} left)`);
+
+    if (connectedClients === 0) {
+      stopGameLoop();
+    }
   });
 });
 
-// game loop
-setInterval(() => {
-  const s = gameState;
-  const dt = 1 / TICK_RATE;
-
-  // move paddles based on total input
-  const speed = 250 * dt;
-  s.paddles[0] += (leftInputs.down - leftInputs.up) * speed;
-  s.paddles[1] += (rightInputs.down - rightInputs.up) * speed;
-
-  // clamp paddles
-  s.paddles[0] = Math.max(0, Math.min(HEIGHT - PADDLE_HEIGHT, s.paddles[0]));
-  s.paddles[1] = Math.max(0, Math.min(HEIGHT - PADDLE_HEIGHT, s.paddles[1]));
-
-  // move ball
-  s.ball.x += s.ball.vx * dt;
-  s.ball.y += s.ball.vy * dt;
-
-  // bounce top/bottom
-  if (s.ball.y < 0 || s.ball.y > HEIGHT) s.ball.vy *= -1;
-
-  // paddle collisions
-  if (s.ball.x - BALL_RADIUS < PADDLE_WIDTH) {
-    const py = s.paddles[0];
-    if (s.ball.y >= py && s.ball.y <= py + PADDLE_HEIGHT) {
-      s.ball.vx = Math.abs(s.ball.vx);
-    }
-  }
-  if (s.ball.x + BALL_RADIUS > WIDTH - PADDLE_WIDTH) {
-    const py = s.paddles[1];
-    if (s.ball.y >= py && s.ball.y <= py + PADDLE_HEIGHT) {
-      s.ball.vx = -Math.abs(s.ball.vx);
-    }
-  }
-
-  // scoring
-  if (s.ball.x < 0) { s.scores[1]++; resetBall(1); }
-  else if (s.ball.x > WIDTH) { s.scores[0]++; resetBall(-1); }
-
-  broadcast({ type: 'state', state: s });
-}, 1000 / TICK_RATE);
 
 
 server.listen(port, () => console.log('Server running on port', port));
