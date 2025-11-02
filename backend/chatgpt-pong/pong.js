@@ -22,27 +22,27 @@ const conversation2Id = "test3";
 let form = document.getElementById("form1");
 form.addEventListener("submit", async (e)=>{
     e.preventDefault();
-    let inputField = document.getElementById("inp1")
-    let msg = inputField.value
-    let msg2 = msg.toLowerCase()
+    let inputField = document.getElementById("inp1");
+    let msg = inputField.value;
+    let msg2 = msg.toLowerCase();
 
     document.getElementById("inp1").value = "";
 
     console.log(msg);
     if(msg2 == "u"){
-      sendInput("left","up", "input")
+      sendInput("left","up", "input");
     }else if (msg2 == "d"){
-      sendInput("left","down", "input")
+      sendInput("left","down", "input");
 
     }
     else if (msg2=="r"){
-      sendInput("dingus", "dingus", "reverse")
+      sendInput("dingus", "dingus", "reverse");
     }else if (msg2=="b"){
-      sendInput("dingus", "dingus", "rotate")
+      sendInput("dingus", "dingus", "rotate");
     }else if (msg2=="s"){
-      sendInput("dingus","dingus", "slow")
+      sendInput("dingus","dingus", "slow");
     }else if (msg2=="z"){
-      sendInput("dingus","dingus","zoom")
+      sendInput("dingus","dingus","zoom");
     }
     const data = JSON.stringify({
         "message": msg,
@@ -60,25 +60,25 @@ form.addEventListener("submit", async (e)=>{
 let form2 = document.getElementById("form2");
 form2.addEventListener("submit", async (e)=>{
     e.preventDefault();
-    let inputField = document.getElementById("inp2")
-    let msg = inputField.value
-    let msg2 = msg.toLowerCase()
+    let inputField = document.getElementById("inp2");
+    let msg = inputField.value;
+    let msg2 = msg.toLowerCase();
     document.getElementById("inp2").value = "";
 
     console.log(msg);
     if(msg2 == "u"){
-      sendInput("right","up", "input")
+      sendInput("right","up", "input");
     }else if (msg2 == "d"){
-      sendInput("right","down", "input")
+      sendInput("right","down", "input");
 
     }else if (msg2=="r"){
-      sendInput("dingus", "dingus", "reverse")
+      sendInput("dingus", "dingus", "reverse");
     }else if (msg2=="b"){
-      sendInput("dingus", "dingus", "rotate")
+      sendInput("dingus", "dingus", "rotate");
     }else if (msg2=="s"){
-      sendInput("dingus","dingus", "slow")
+      sendInput("dingus","dingus", "slow");
     }else if (msg2=="z"){
-      sendInput("dingus","dingus","zoom")
+      sendInput("dingus","dingus","zoom");
     }
     const data = JSON.stringify({
         "message": msg,
@@ -115,9 +115,9 @@ function connectToPong() {
     if (msg.type == "scores"){
       if (msg.p1 > msg.p2){
 
-        statusEl.textContent = "Team 1 wins. Press the button to play again"
+        statusEl.textContent = "Team 1 wins. Press the button to play again";
       }else{
-        statusEl.textContent="Team 2 wins. Press the button to play again"
+        statusEl.textContent="Team 2 wins. Press the button to play again";
       }
       
     }

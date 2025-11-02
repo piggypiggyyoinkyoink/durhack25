@@ -10,12 +10,7 @@ const bodyParser = require("body-parser");
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-
-
-
-
-
-
+const port = process.env.PORT || 8080;
 
 
 app.use(express.static(path.join('./chatgpt-pong')));
@@ -27,22 +22,9 @@ app.use(bodyParser.json());
 
 
 
-
-
-
-/*
-async function a(){
-    let a = await fetch('https://api.durhack.talkjs.com/v1/tKAe9pYx', {
-        headers: {
-    Authorization: 'Bearer sk_test_j3dBD6Y7qNNd4P5Ye9I18QgLFbqIDh2m',
-    },
-    });
-    console.log(a);
-    }
-a();*/
 app.post("/sendmessage", async function(req,res){
     
-    console.log(req.body);//contains message text, user ID and conversation ID.
+    //console.log(req.body);//contains message text, user ID and conversation ID.
     const conversationId = req.body.conversation;
     const userId = req.body.user;
     const messageText = req.body.message;
@@ -69,15 +51,15 @@ app.post("/sendmessage", async function(req,res){
             "type": "UserMessage"
         }])
         })
-        console.log(sendMessage);
+        //console.log(sendMessage);
         if (sendMessage.ok){
 
             res.sendStatus(200);
         }else{
-            res.send(500)
+            res.send(500);
         }
     }else{
-        res.send(500)
+        res.send(500);
     }
 })
 
@@ -113,14 +95,10 @@ app.get('api/conversation/:converstaionName'), function (req,resp){
 
 
 
-
-
-
-
 //chatgpt pong
 app.post("/pong/sendmessage", async function(req,res){
     
-    console.log(req.body);//contains message text, user ID and conversation ID.
+    //console.log(req.body);//contains message text, user ID and conversation ID.
     const conversationId = req.body.conversation;
     const userId = req.body.user;
     const messageText = req.body.message;
@@ -144,31 +122,24 @@ app.post("/pong/sendmessage", async function(req,res){
         body:JSON.stringify([{
             "text": `${messageText}`,
             "sender": `${userId}`,
-            "type": "UserMessage"
+            "tpe": "UserMessage"
         }])
         })
-        //console.log(sendMessage);
         if (sendMessage.ok){
 
             res.sendStatus(200);
         }else{
-            res.send(500)
+            res.send(500);
         }
     }else{
-        res.send(500)
+        res.send(500);
     }
 })
-
 
 
 app.get("/pong", (req, res) => {
   res.sendFile(path.join(__dirname, "chatgpt-pong/pong.html"));
 });
-
-
-const port = process.env.PORT || 8080;
-
-
 
 
 let gameState = {
@@ -244,25 +215,20 @@ function updateGame() {
   if (b.x < 0) {
     gameState.scores[1]++;
     if (gameState.scores[1] >= 10){
-      stopGameLoop()
+      stopGameLoop();
       broadcast({type:"scores", p1: gameState.scores[0], p2:gameState.scores[1]})
-
     }else{
-
       resetBall();
     }
   }
   if (b.x > WIDTH) {
     gameState.scores[0]++;
       if (gameState.scores[0] >= 10){
-
-      stopGameLoop()
+      stopGameLoop();
       broadcast({type:"scores", p1: gameState.scores[0], p2:gameState.scores[1]})
     }else{
-
       resetBall();
     }
-
   }
 
   broadcast({ type: "state", state: gameState });
@@ -280,7 +246,7 @@ function resetBall() {
 function startGameLoop() {
   if (gameInterval) return;
   console.log("🎮 Game loop started");
-  gameState.scores = [0,0]
+  gameState.scores = [0,0];
   gameInterval = setInterval(updateGame, 1000 / 20);
 }
 
@@ -288,7 +254,7 @@ function stopGameLoop() {
   if (!gameInterval) return;
   clearInterval(gameInterval);
   gameInterval = null;
-  console.log("🛑 Game loop stopped (no players connected)");
+  console.log("🛑 Game loop stopped");
 }
 
 // Handle WebSocket connections
@@ -317,28 +283,18 @@ wss.on("connection", (ws, req) => {
     try {
       const data = JSON.parse(msg);
       if (data.type === 'input') {
-          console.log(data)
-    
         if (data.side === 'left') {
             if (data.down){
-                //gameState.paddles[0]+=40;
-                inputs[0] += 1
+                inputs[0] += 1;
             }else{
-                //gameState.paddles[0]-=40;
-                inputs[0] -= 1
-
+                inputs[0] -= 1;
             }
         } else if (data.side === 'right') {
             if (data.down){
-                //gameState.paddles[1]+=40;
-                inputs[1] += 1
-
+                inputs[1] += 1;
             }else{
-                //gameState.paddles[1]-=40;
-                inputs[1] -= 1
-
+                inputs[1] -= 1;
             }
-
         }
       } else if (data.type === 'reverse') {
         gameState.ball.vx *= -1;
@@ -374,4 +330,3 @@ wss.on("connection", (ws, req) => {
 
 
 server.listen(port, () => console.log('Server running on port', port));
-//module.exports=app;
