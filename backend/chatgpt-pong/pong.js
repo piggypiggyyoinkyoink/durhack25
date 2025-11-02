@@ -106,6 +106,15 @@ function connectToPong() {
     if (msg.type === 'state') {
       drawGame(msg.state);
     }
+    if (msg.type == "scores"){
+      if (msg.p1 > msg.p2){
+
+        statusEl.textContent = "Team 1 wins. Press the button to play again"
+      }else{
+        statusEl.textContent="Team 2 wins. Press the button to play again"
+      }
+      
+    }
   };
 
   ws.onclose = () => {

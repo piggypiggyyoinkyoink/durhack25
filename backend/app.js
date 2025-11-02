@@ -243,11 +243,26 @@ function updateGame() {
   // Score
   if (b.x < 0) {
     gameState.scores[1]++;
-    resetBall();
+    if (gameState.scores[1] >= 10){
+      stopGameLoop()
+      broadcast({type:"scores", p1: gameState.scores[0], p2:gameState.scores[1]})
+
+    }else{
+
+      resetBall();
+    }
   }
   if (b.x > WIDTH) {
     gameState.scores[0]++;
-    resetBall();
+      if (gameState.scores[0] >= 10){
+
+      stopGameLoop()
+      broadcast({type:"scores", p1: gameState.scores[0], p2:gameState.scores[1]})
+    }else{
+
+      resetBall();
+    }
+
   }
 
   broadcast({ type: "state", state: gameState });
