@@ -1,15 +1,18 @@
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 const connectBtn = document.getElementById('connectBtn');
+const backBtn = document.getElementById("backBtn");
 const statusEl = document.getElementById('status');
 
 let ws;
 const PADDLE_HEIGHT = 80;
-
-connectBtn.addEventListener('click', connectToPong);
-
 let params = new URLSearchParams(document.location.search);
 let userId = params.get("name");
+
+connectBtn.addEventListener('click', connectToPong);
+backBtn.addEventListener("click", function(){
+  window.location.href = "http://"+location.host + `/games.html?name=${userId}`
+})
 const conversationId = 'my_conversation2';
 const conversation2Id = "test3";
 //handle submitting messages from Conversation 1
