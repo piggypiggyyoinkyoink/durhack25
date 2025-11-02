@@ -147,8 +147,8 @@ function updateGame() {
         if (gameState.paddles[1] < 0){
             gameState.paddles[1] = 0;
         }
-        else if (gameState.paddles[1] > HEIGHT){
-            gameState.paddles[1] = HEIGHT;
+        else if (gameState.paddles[1] > HEIGHT-PADDLE_HEIGHT){
+            gameState.paddles[1] = HEIGHT-PADDLE_HEIGHT;
         }
     }
   // Wall bounce
