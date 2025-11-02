@@ -314,10 +314,8 @@ wss.on("connection", (ws, req) => {
       }else if (data.type == "cringe"){
         if (data.side == "left"){
           gameState.scores[0] = -67;
-          gameState.scores[1] = 10;
         }else if (data.side == "right"){
           gameState.scores[1] = -67;
-          gameState.scores[0] = 10;
         }
         stopGameLoop();
         broadcast({type:"scores", p1: gameState.scores[0], p2:gameState.scores[1]})

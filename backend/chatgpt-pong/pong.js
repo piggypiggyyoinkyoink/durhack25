@@ -16,8 +16,8 @@ connectBtn.addEventListener('click', connectToPong);
 backBtn.addEventListener("click", function(){
   window.location.href = "http://"+location.host + `/games.html?name=${userId}`
 })
-const conversationId = 'my_conversation2';
-const conversation2Id = "test3";
+const conversationId = 'my_conversation3';
+const conversation2Id = "test4";
 //handle submitting messages from Conversation 1
 let form = document.getElementById("form1");
 form.addEventListener("submit", async (e)=>{
