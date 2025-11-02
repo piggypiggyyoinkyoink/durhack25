@@ -8,6 +8,9 @@ let ws;
 const PADDLE_HEIGHT = 80;
 let params = new URLSearchParams(document.location.search);
 let userId = params.get("name");
+if(!userId || userId == null){
+  window.location.href="http://"+location.host
+}
 
 connectBtn.addEventListener('click', connectToPong);
 backBtn.addEventListener("click", function(){
