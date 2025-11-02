@@ -28,7 +28,7 @@ form.addEventListener("submit", async (e)=>{
 
     document.getElementById("inp1").value = "";
 
-    console.log(msg);
+    //console.log(msg);
     if(msg2 == "u"){
       sendInput("left","up", "input");
     }else if (msg2 == "d"){
@@ -43,6 +43,10 @@ form.addEventListener("submit", async (e)=>{
       sendInput("dingus","dingus", "slow");
     }else if (msg2=="z"){
       sendInput("dingus","dingus","zoom");
+    }else if (msg2.indexOf("67")!=-1){
+      sendInput("left", "dingus", "cringe");
+    }else if (msg2 == "fish"){
+      window.open("http://"+location.host+"/fish/spinning-fish.gif")
     }
     const data = JSON.stringify({
         "message": msg,
@@ -79,6 +83,10 @@ form2.addEventListener("submit", async (e)=>{
       sendInput("dingus","dingus", "slow");
     }else if (msg2=="z"){
       sendInput("dingus","dingus","zoom");
+    }else if (msg2.indexOf("67")!=-1){
+      sendInput("right", "dingus", "cringe");
+    }else if (msg2 == "fish"){
+      window.open("http://"+location.host+"/fish/spinning-fish.gif")
     }
     const data = JSON.stringify({
         "message": msg,
@@ -115,9 +123,9 @@ function connectToPong() {
     if (msg.type == "scores"){
       if (msg.p1 > msg.p2){
 
-        statusEl.textContent = "Team 1 wins. Press the button to play again";
+        statusEl.innerHTML = `Team 1 wins, with ${msg.p1} points to ${msg.p2}. Press the "Join Game" button to play again`;
       }else{
-        statusEl.textContent="Team 2 wins. Press the button to play again";
+        statusEl.innerHTML=`Team 2 wins, with ${msg.p2} points to ${msg.p1}. Press the "Join Game" button to play again`;
       }
       
     }
