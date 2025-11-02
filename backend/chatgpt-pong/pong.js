@@ -45,7 +45,7 @@ form.addEventListener("submit", async (e)=>{
       sendInput("dingus","dingus","zoom");
     }else if (msg2.indexOf("67")!=-1){
       sendInput("left", "dingus", "cringe");
-    }else if (msg2 == "fish"){
+    }else if (msg2 == "fish"|| msg2 == "f"){
       window.open("http://"+location.host+"/fish/spinning-fish.gif")
     }
     const data = JSON.stringify({
@@ -85,7 +85,7 @@ form2.addEventListener("submit", async (e)=>{
       sendInput("dingus","dingus","zoom");
     }else if (msg2.indexOf("67")!=-1){
       sendInput("right", "dingus", "cringe");
-    }else if (msg2 == "fish"){
+    }else if (msg2 == "fish" || msg2 == "f"){
       window.open("http://"+location.host+"/fish/spinning-fish.gif")
     }
     const data = JSON.stringify({
