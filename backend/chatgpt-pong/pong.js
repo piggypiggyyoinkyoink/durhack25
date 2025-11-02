@@ -123,9 +123,12 @@ function connectToPong() {
     if (msg.type == "scores"){
       if (msg.p1 > msg.p2){
 
-        statusEl.innerHTML = `Team 1 wins, with ${msg.p1} points to ${msg.p2}. Press the "Join Game" button to play again`;
+        statusEl.innerHTML = `Team 1 wins, with ${msg.p1} points to ${msg.p2}. Press the "Join Game" button to play again.`;
       }else{
-        statusEl.innerHTML=`Team 2 wins, with ${msg.p2} points to ${msg.p1}. Press the "Join Game" button to play again`;
+        statusEl.innerHTML=`Team 2 wins, with ${msg.p2} points to ${msg.p1}. Press the "Join Game" button to play again.`;
+      }
+      if (msg.p1 == -67 || msg.p2 == -67){
+        statusEl.innerHTML += " Don't be cringe.";
       }
       
     }
