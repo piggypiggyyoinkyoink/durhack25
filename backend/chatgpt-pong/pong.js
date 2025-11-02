@@ -48,16 +48,25 @@ form.addEventListener("submit", async (e)=>{
     }else if (msg2 == "fish"|| msg2 == "f"){
       window.open("http://"+location.host+"/fish/spinning-fish.gif")
     }
-    const data = JSON.stringify({
-        "message": msg,
-        "conversation":conversationId,
-        "user":userId
-    });
-    await fetch("/pong/sendmessage", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: data
-    });
+    
+    const sendMessage = await fetch(`https://api.durhack.talkjs.com/v1/tKAe9pYx/conversations/${conversationId}/messages`,{
+            method: "POST",
+        headers: {
+            Authorization: 'Bearer sk_test_j3dBD6Y7qNNd4P5Ye9I18QgLFbqIDh2m',
+            "Content-Type" : "application/json"
+        },
+        body:JSON.stringify([{
+            "text": `${msg}`,
+            "sender": `${userId}`,
+            "tpe": "UserMessage"
+        }])
+        })
+        if (sendMessage.ok){
+
+            res.sendStatus(200);
+        }else{
+            res.send(500);
+        }
 });
 
 //handle submitting messages from Conversation 2:
@@ -88,24 +97,54 @@ form2.addEventListener("submit", async (e)=>{
     }else if (msg2 == "fish" || msg2 == "f"){
       window.open("http://"+location.host+"/fish/spinning-fish.gif")
     }
-    const data = JSON.stringify({
-        "message": msg,
-        "conversation":conversation2Id,
-        "user":userId
-    });
-    await fetch("/pong/sendmessage", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: data
-    });
+    
+
+    const sendMessage = await fetch(`https://api.durhack.talkjs.com/v1/tKAe9pYx/conversations/${conversation2Id}/messages`,{
+            method: "POST",
+        headers: {
+            Authorization: 'Bearer sk_test_j3dBD6Y7qNNd4P5Ye9I18QgLFbqIDh2m',
+            "Content-Type" : "application/json"
+        },
+        body:JSON.stringify([{
+            "text": `${msg}`,
+            "sender": `${userId}`,
+            "tpe": "UserMessage"
+        }])
+        })
+        if (sendMessage.ok){
+
+            res.sendStatus(200);
+        }else{
+            res.send(500);
+        }
 });
 
 function connectToPong() {
   const wsUrl = (location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/pong';
   ws = new WebSocket(wsUrl);
 
-  ws.onopen = () => {
+  ws.onopen = async () => {
     statusEl.textContent = 'Connected — chaos awaits!';
+    const registerConversation = await fetch(`https://api.durhack.talkjs.com/v1/tKAe9pYx/conversations/${conversationId}`, {
+        method: "PUT",
+        headers: {
+            Authorization: 'Bearer sk_test_j3dBD6Y7qNNd4P5Ye9I18QgLFbqIDh2m',
+            "Content-Type" : "application/json"
+        },
+        body: JSON.stringify({
+            "participants" : [userId]
+        })
+    });
+    const registerConversation2 = await fetch(`https://api.durhack.talkjs.com/v1/tKAe9pYx/conversations/${conversation2Id}`, {
+        method: "PUT",
+        headers: {
+            Authorization: 'Bearer sk_test_j3dBD6Y7qNNd4P5Ye9I18QgLFbqIDh2m',
+            "Content-Type" : "application/json"
+        },
+        body: JSON.stringify({
+            "participants" : [userId]
+        })
+    });
   };
 
   ws.onmessage = (event) => {
