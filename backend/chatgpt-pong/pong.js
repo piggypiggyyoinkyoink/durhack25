@@ -3,7 +3,8 @@ const ctx = canvas.getContext('2d');
 const connectBtn = document.getElementById('connectBtn');
 const backBtn = document.getElementById("backBtn");
 const statusEl = document.getElementById('status');
-
+const audio = document.getElementById("myAudio");
+const winner = document.getElementById("winner");
 let ws;
 const PADDLE_HEIGHT = 80;
 let params = new URLSearchParams(document.location.search);
@@ -12,7 +13,11 @@ if(!userId || userId == null){
   window.location.href="http://"+location.host
 }
 
-connectBtn.addEventListener('click', connectToPong);
+connectBtn.addEventListener('click', () =>{
+  connectToPong();
+  audio.loop = true;
+  audio.play();
+});
 backBtn.addEventListener("click", function(){
   window.location.href = "http://"+location.host + `/games.html?name=${userId}`
 })
@@ -160,6 +165,10 @@ function connectToPong() {
       drawGame(msg.state);
     }
     if (msg.type == "scores"){
+      audio.loop = false;
+      audio.pause();
+      audio.currentTime = 0;
+      winner.play();
       if (msg.p1 > msg.p2){
 
         statusEl.innerHTML = `Team 1 wins, with ${msg.p1} points to ${msg.p2}. Press the "Join Game" button to play again.`;
@@ -175,6 +184,9 @@ function connectToPong() {
 
   ws.onclose = () => {
     statusEl.textContent = 'Disconnected';
+    audio.loop = false;
+    audio.pause();
+    audio.currentTime = 0;
   };
 }
 
